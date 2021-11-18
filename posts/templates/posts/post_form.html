@@ -1,0 +1,10 @@
+{% extends 'posts/base.html' %}
+{% block content %}
+<h1>CREATE A POST</h1>
+<form action="{% url 'new' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="POST">
+</form>
+<a href="{% url 'list' %}"><h2>BACK TO MAIN</h2></a>
+{% endblock %}
