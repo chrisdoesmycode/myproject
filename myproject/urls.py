@@ -17,12 +17,24 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from posts.views import PostList, PostCreate, PostDetail
+from posts.views import PostList, PostCreate, PostDetail, UserEditView
+from django.contrib.auth import views as auth_views
+from django.contrib.auth import logout
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
+    # path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/profile', UserEditView.as_view(template_name='posts/profile.html'), name='profile'),
+    # path('accounts/profile/', include('allauth.urls')),
+    # path('password/', auth_views.PasswordChangeView.as_view()),
     path('', PostList.as_view(), name='list'),
     path('new/', PostCreate.as_view(), name='new'),
     path('posts/<pk>/', PostDetail.as_view(), name='detail'),
+    # path('logout', logout, name='logout'),
+    path('logout', LogoutView.as_view(next_page = settings.LOGOUT_REDIRECT_URL), name='logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+# http://127.0.0.1:8000/accounts/email/
