@@ -1,7 +1,7 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
 FROM python:3.8-slim-buster
 
-EXPOSE 8000
+EXPOSE 80
 
 ENV VAR1=10
 
@@ -10,6 +10,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
+ENV PORT 80
 
 # Install pip requirements
 COPY requirements.txt .
@@ -23,5 +24,7 @@ COPY . /app
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
+
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["gunicorn", "--bind", "127.0.0.1:8000", "myproject.wsgi"]
+# CMD ["gunicorn", "--bind", "0.0.0.0:80", "myproject.wsgi"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:80" ,"--settings=myproject.settings"]
